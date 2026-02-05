@@ -1,1 +1,245 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <title>Valentine</title> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <style> body { font-family: Arial, sans-serif; background: #ffffff; text-align: center; padding-top: 100px; } h1 { font-size: 28px; } #buttons { margin-top: 40px; } button { font-size: 20px; padding: 14px 28px; margin: 10px; cursor: pointer; } #yesBtn { transition: transform 0.2s; } </style> </head> <body> <h1>Will you be my Valentine?</h1> <div id="buttons"> <button id="yesBtn">Yes</button> <button id="noBtn">No</button> </div> <script> let scale = 1; document.getElementById("noBtn").onclick = function () { scale += 0.2; document.getElementById("yesBtn").style.transform = "scale(" + scale + ")"; }; document.getElementById("yesBtn").onclick = function () { document.body.innerHTML = "<h1>Thank you so much.<br>I will not waste this chance.</h1>"; }; </script> </body> </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Valentine</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* --- Base Styles --- */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background: linear-gradient(to bottom, #ffe6ee, #ffffff);
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.container {
+    width: 360px;
+    height: 640px;
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 24px 18px;
+    box-shadow: 0 12px 30px rgba(255, 77, 109, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+    position: relative;
+}
+
+h1 {
+    font-size: 24px;
+    color: #d6336c;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.photos {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.photo {
+    width: 240px;
+    height: 180px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #ffe6ee;
+    border: 3px solid #ffb3c7;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- Button Logic Styles --- */
+.button-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    height: 150px; /* Space for growth */
+    position: relative;
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 18px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+#yesBtn {
+    background: #ff4d6d;
+    color: #ffffff;
+    z-index: 50; /* Stays on top */
+    position: absolute;
+}
+
+#noBtn {
+    background: #f2f2f2;
+    color: #444444;
+    z-index: 10;
+    position: absolute;
+    transform: translateX(80px); /* Initial separation */
+}
+
+/* --- Animations --- */
+.heart-bg {
+    position: absolute;
+    background-color: #ff4d6d;
+    width: 20px;
+    height: 20px;
+    transform: rotate(-45deg);
+    position: fixed;
+    top: -10%;
+    pointer-events: none;
+    z-index: 1;
+    animation: fall linear forwards;
+}
+
+.heart-bg::before, .heart-bg::after {
+    content: "";
+    background-color: #ff4d6d;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+}
+.heart-bg::before { top: -10px; left: 0; }
+.heart-bg::after { left: 10px; top: 0; }
+
+@keyframes fall {
+    to { transform: translateY(110vh) rotate(45deg); opacity: 0; }
+}
+
+.photo-heart-burst {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 40px; height: 40px;
+    background-color: #ff4d6d;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    pointer-events: none;
+    z-index: 5;
+    animation: burst 0.8s ease-out forwards;
+}
+
+.photo-heart-burst::before, .photo-heart-burst::after {
+    content: "";
+    background-color: #ff4d6d;
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    position: absolute;
+}
+.photo-heart-burst::before { top: -20px; left: 0; }
+.photo-heart-burst::after { left: 20px; top: 0; }
+
+@keyframes burst {
+    0% { transform: translate(-50%, -50%) rotate(-45deg) scale(0.5); opacity: 1; }
+    100% { transform: translate(-50%, -50%) rotate(-45deg) scale(3); opacity: 0; }
+}
+
+.final-message-container {
+    height: 100vh; width: 100vw;
+    background: #ffe6ee;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 100;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Will you be my Valentine?</h1>
+
+    <div class="photos">
+        <div class="photo" onclick="addBurst(this)">
+            <img src="riri1.jpg">
+        </div>
+        <div class="photo" onclick="addBurst(this)">
+            <img src="riri2.gif">
+        </div>
+    </div>
+
+    <div class="button-wrapper">
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+    </div>
+</div>
+
+<script>
+let scale = 1;
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+
+// Background Hearts
+function createFallingHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart-bg");
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => { heart.remove(); }, 5000);
+}
+let heartInterval = setInterval(createFallingHeart, 400);
+
+// Photo Burst
+function addBurst(el) {
+    const burst = document.createElement('div');
+    burst.classList.add('photo-heart-burst');
+    el.appendChild(burst);
+    setTimeout(() => burst.remove(), 800);
+}
+
+// The "No" button makes "Yes" grow until it eats the "No" button
+noBtn.onclick = function () {
+    scale += 0.6; // Growing faster now!
+    yesBtn.style.transform = `scale(${scale})`;
+    
+    // Shift the Yes button slightly to the right to overlap the No button sooner
+    let moveX = scale * 10; 
+    yesBtn.style.left = `calc(50% - ${yesBtn.offsetWidth/2}px)`;
+    
+    if (scale > 4) {
+        noBtn.style.opacity = "0"; // Hide the No button once it's covered
+        noBtn.style.pointerEvents = "none";
+    }
+};
+
+yesBtn.onclick = function () {
+    clearInterval(heartInterval);
+    setInterval(createFallingHeart, 50); 
+    document.body.innerHTML = `
+        <div class="final-message-container">
+            <h1 style="color:#d6336c; text-align:center; padding:20px; font-size:18px;">
+                Thank you so much.<br><br>I choose you. <br> Not for a moment. Not for convenience. <br>I choose you with intention.<br>Your yes matters to me.<br>It is not a small thing.<br>It is trust.<br>It is hope.<br>I respect it.<br>I promise to value you, your time, and your heart.<br>Thank you for choosing me too.<br>I am grateful.<br>I am serious.<br>I am here.
+            </h1>
+        </div>
+    `;
+};
+</script>
+
+</body>
+</html>
