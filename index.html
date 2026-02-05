@@ -213,22 +213,30 @@ function addBurst(el) {
     setTimeout(() => burst.remove(), 800);
 }
 
-// The "No" button makes "Yes" grow until it eats the "No" button
+// The "No" button makes "Yes" grow
 noBtn.onclick = function () {
-    scale += 0.6; // Growing faster now!
+    scale += 0.6; 
     yesBtn.style.transform = `scale(${scale})`;
     
-    // Shift the Yes button slightly to the right to overlap the No button sooner
-    let moveX = scale * 10; 
-    yesBtn.style.left = `calc(50% - ${yesBtn.offsetWidth/2}px)`;
-    
     if (scale > 4) {
-        noBtn.style.opacity = "0"; // Hide the No button once it's covered
+        noBtn.style.opacity = "0"; 
         noBtn.style.pointerEvents = "none";
     }
 };
 
 yesBtn.onclick = function () {
+    // --- DATABASE TRACKING (FORMSPREE) ---
+    // REPLACE 'YOUR_FORM_ID_HERE' WITH YOUR ACTUAL ID
+    fetch('https://formspree.io/f/mykdgwgl', {
+        method: 'POST',
+        body: JSON.stringify({ 
+            response: "YES!", 
+            timestamp: new Date().toLocaleString() 
+        }),
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    // --- CELEBRATION ---
     clearInterval(heartInterval);
     setInterval(createFallingHeart, 50); 
     document.body.innerHTML = `
